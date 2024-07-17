@@ -1,0 +1,32 @@
+#!/bin/bash
+
+CASTLEDIR=castle/castle*
+for file in $CASTLEDIR; do
+    echo @
+    echo $file
+    echo "relaxed optimal"
+    (
+        ulimit -t 60
+        ulimit -v 2000000
+        python3 fast-downward/fast-downward.py castle/domain.pddl $file --search "astar(lmcut())" --translate-options --relaxed
+    )
+    echo @
+    echo @
+    echo $file
+    echo "add"
+    (
+        ulimit -t 60
+        ulimit -v 2000000
+        python3 fast-downward/fast-downward.py $file --heuristic "h=add()" --search "eager_greedy([h])"
+    )
+    echo @
+    echo @
+    echo $file
+    echo "planopt_add"
+    (
+        ulimit -t 60
+        ulimit -v 2000000
+        python3 fast-downward/fast-downward.py $file --heuristic "h=planopt_add()" --search "eager_greedy([h])"
+    )
+    echo @
+done

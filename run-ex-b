@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CASTLEDIR=castle/castle*
+for file in $CASTLEDIR; do
+    echo @
+    echo $file
+    echo "blind"
+    (
+        ulimit -t 60
+        ulimit -v 2000000
+        python3 fast-downward/fast-downward.py castle/domain.pddl $file --search "astar(blind())"
+    )
+    echo @
+    echo @
+    echo $file
+    echo "planopt_rtg"
+    (
+        ulimit -t 60
+        ulimit -v 2000000
+        python3 fast-downward/fast-downward.py castle/domain.pddl $file --search "astar(planopt_relaxed_task_graph())"
+    )
+    echo @
+done    
