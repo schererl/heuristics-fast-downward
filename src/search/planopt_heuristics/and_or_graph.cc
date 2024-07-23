@@ -173,7 +173,11 @@ void AndOrGraph::weighted_most_conservative_valuation() {
                     pred_node.additive_cost = 0;
                     for (NodeID succ_id:pred_node.successor_ids){
                         AndOrGraphNode &succ_node = nodes[succ_id];
+                         
+                        // hadd:
                         pred_node.additive_cost += succ_node.additive_cost;
+                        // hmax:
+                        // pred_node.additive_cost = max(pred_node.additive_cost, succ_node.additive_cost);
                     }
                     pred_node.additive_cost += pred_node.direct_cost;
                     //cout << "\t node added " << pred_id << " v: " << pred_node.additive_cost << " force " << pred_node.successor_ids.size() << " of " << pred_node.num_forced_successors << endl;
